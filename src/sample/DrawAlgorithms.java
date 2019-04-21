@@ -140,19 +140,18 @@ public class DrawAlgorithms {
         int curY = b;
         int b2 = b * b;
         int a2 = a * a;
-        a *= a;
-        int d =  a2 + b2  - 2 * a2 * curY;
+        int d = b2 + a2 * (1 - (curY << 1));
         while (curY >= 0) {
             drawSymmetricPixels(writer, xc, yc, curX, curY, color);
 
             if (d < 0) {
-                int buf = ((d + a2 * curY) << 1) - 1;//((d + a * curY) << 1) - a;
+                int buf = ((d + a2 * curY) << 1) - 1;
                 curX++;
                 if (buf <= 0) {
-                    d += 2 * b2 * curX + b2;// b2 * ((curX << 1) + 1);
+                    d += b2 * ((curX << 1) + 1);
                 } else {
                     curY--;
-                    d += 2 * b2 * curX + b2 + a2 - 2 * a2 * curY;// ((curX << 1) + 1) + a * (1 - (curY << 1));
+                    d += b2 * ((curX << 1) + 1) + a2 * (1 - (curY << 1));
                 }
                 continue;
             }
@@ -162,16 +161,16 @@ public class DrawAlgorithms {
                 curY--;
 
                 if (buf > 0) {
-                    d += a2 - 2 * a2 * curY;//a * ((curY << 1) + 1);
+                    d += a2 * (1 - (curY << 1));
                 } else {
                     curX++;
-                    d += 2 * b2 * curX + b2 + a2 - 2 * a2 * curY;//((curX << 1) + 1) * b2 - ((curY << 1) + 1) * a;
+                    d += b2 * ((curX << 1) + 1) + a2 * (1 - (curY << 1));
                 }
                 continue;
             }
             curX++;
             curY--;
-            d += 2 * b2 * curX + b2 + a2 - 2 * a2 * curY;//((curX << 1) + 1) * b2 + a * (1 - (curY << 1));
+            d += b2 * ((curX << 1) + 1) + a2 * (1 - (curY << 1));
         }
     }
 
