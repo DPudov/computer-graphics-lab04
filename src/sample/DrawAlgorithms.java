@@ -27,10 +27,6 @@ public class DrawAlgorithms {
         writer.setColor(xc + curX, yc - curY, color);
         writer.setColor(xc - curX, yc + curY, color);
         writer.setColor(xc - curX, yc - curY, color);
-//        System.out.println((xc + curX) + " " + (yc + curY));
-//        System.out.println((xc + curX) + " " + (yc - curY));
-//        System.out.println((xc - curX) + " " + (yc + curY));
-//        System.out.println((xc - curX) + " " + (yc - curY));
     }
 
     // Канонический эллипс полностью перекрывает каноническую окружность при a = b = radius
@@ -73,8 +69,8 @@ public class DrawAlgorithms {
         double oct = Math.PI * radius / 4.0;
         double delta = 1.0 / radius;
         for (double theta = 0; theta < oct + delta / 2.0; theta += delta) {
-            int curX = round(radius * Math.cos(theta));
-            int curY = round(radius * Math.sin(theta));
+            int curX = round(radius * Math.cos(Math.toRadians(theta)));
+            int curY = round(radius * Math.sin(Math.toRadians(theta)));
             drawSymmetricPixels(writer, xc, yc, curX, curY, color);
             drawSymmetricPixels(writer, xc, yc, curY, curX, color);
         }
@@ -90,8 +86,8 @@ public class DrawAlgorithms {
         double quart = Math.PI * max / 2.0;
         double delta = 1.0 / max;
         for (double theta = 0; theta < quart + delta / 2.0; theta += delta) {
-            int curX = round(a * Math.cos(theta));
-            int curY = round(b * Math.sin(theta));
+            int curX = round(a * Math.cos(Math.toRadians(theta)));
+            int curY = round(b * Math.sin(Math.toRadians(theta)));
             drawSymmetricPixels(writer, xc, yc, curX, curY, color);
         }
     }
@@ -228,12 +224,11 @@ public class DrawAlgorithms {
             int curYInt = (int) curY;
 
             drawSymmetricPixels(writer, xc, yc, curXInt, curYInt, color);
+            curX++;
             if (d < 0) {
-                curX++;
                 dx += b22;
                 d += dx + b2;
             } else {
-                curX++;
                 curY--;
                 dx += b22;
                 dy -= a22;
@@ -247,13 +242,11 @@ public class DrawAlgorithms {
             int curYInt = (int) curY;
 
             drawSymmetricPixels(writer, xc, yc, curXInt, curYInt, color);
-
+            curY--;
             if (d > 0) {
-                curY--;
                 dy -= a22;
                 d += a2 - dy;
             } else {
-                curY--;
                 curX++;
                 dx += b22;
                 dy -= a22;
@@ -323,6 +316,9 @@ public class DrawAlgorithms {
 
     public void runMultiEllipse(String alg, int xc, int yc, int d, int aBeg, int bBeg, int count, Color color) {
         for (int i = 0; i < count; i++) {
+            if (aBeg == 0 || bBeg == 0) {
+                continue;
+            }
             runSingleEllipse(alg, xc, yc, aBeg, bBeg, color);
             if (aBeg > bBeg) {
                 aBeg += d;
